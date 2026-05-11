@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'; 
 import jwt from 'jsonwebtoken';
 import * as UserModel from '../models/userModel.js';
+import pool from '../config/db.js';
 
 export const protect = asyncHandler(async (req, res, next) => {
     let token;
@@ -21,6 +22,22 @@ export const protect = asyncHandler(async (req, res, next) => {
                 username: user.username,
                 role: user.role
             };
+
+            // Enrich user data with nama_siswa and nama_kelas for siswa role
+            if (user.role === 'siswa') {
+                const siswaQuery = `
+                    SELECT s.nama_siswa, s.nisn, k.nama_kelas
+                    FROM siswa s
+                    LEFT JOIN kelas k ON s.kelas_id = k.kelas_id
+                    WHERE s.siswa_id = $1
+                `;
+                const siswaResult = await pool.query(siswaQuery, [user.user_id]);
+                if (siswaResult.rows.length > 0) {
+                    req.user.nama_siswa = siswaResult.rows[0].nama_siswa;
+                    req.user.nisn = siswaResult.rows[0].nisn;
+                    req.user.nama_kelas = siswaResult.rows[0].nama_kelas;
+                }
+            }
             
             next();
 
