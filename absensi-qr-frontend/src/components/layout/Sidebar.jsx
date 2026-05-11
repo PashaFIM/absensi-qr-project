@@ -13,7 +13,7 @@ const Sidebar = ({ role }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gray-800 border-r border-gray-700 shadow-2xl overflow-y-auto">
+    <div className="flex flex-col h-full bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-800 shadow-2xl overflow-y-auto">
       
       {/* App Title/Logo */}
       <div className="p-6 border-b border-gray-700">

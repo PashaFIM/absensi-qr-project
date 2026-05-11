@@ -1,13 +1,9 @@
-import React, { useState, createContext, useContext, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from '../shared/Header';
 import { Bars3Icon } from '@heroicons/react/24/outline';
-
-// Context agar halaman anak bisa mendaftarkan fungsi refresh ke Header
-const RefreshContext = createContext({ setRefreshFn: () => {}, setRefreshing: () => {} });
-
-export const useHeaderRefresh = () => useContext(RefreshContext);
+import { RefreshContext } from '../../hooks/useHeaderRefresh';
 
 const Layout = ({ role }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -20,7 +16,7 @@ const Layout = ({ role }) => {
 
   return (
     <RefreshContext.Provider value={{ setRefreshFn, setRefreshing }}>
-      <div className="flex h-screen bg-gray-50"> 
+      <div className="flex h-screen bg-gray-50 text-gray-900 transition-colors dark:bg-gray-950 dark:text-gray-100"> 
         {/* Desktop Sidebar */}
         <aside className="hidden md:block w-64 flex-shrink-0">
           <Sidebar role={role} />
@@ -31,7 +27,7 @@ const Layout = ({ role }) => {
           className={`fixed inset-0 z-40 md:hidden transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
           onClick={() => setIsSidebarOpen(false)}
         >
-          <div className="w-64 h-full bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div className="w-64 h-full bg-white shadow-2xl dark:bg-gray-900" onClick={(e) => e.stopPropagation()}>
             <Sidebar role={role} />
           </div>
         </div>
@@ -43,7 +39,7 @@ const Layout = ({ role }) => {
           {/* Header/Navbar (Tinggi ditentukan oleh konten) */}
           <Header onRefresh={refreshFn} refreshing={refreshing}>
               <button 
-                  className="md:hidden p-2 text-gray-600 rounded-lg hover:bg-gray-100"
+                  className="md:hidden p-2 text-gray-600 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800"
                   onClick={() => setIsSidebarOpen(true)}
               >
                   <Bars3Icon className="w-6 h-6" />
@@ -52,7 +48,7 @@ const Layout = ({ role }) => {
 
           {/* Page Content (Mengisi sisa ruang yang tersedia) */}
           {/* PERBAIKAN RECHARTS: main H-FULL + FLEX-GROW untuk mengisi sisa ruang setelah header */}
-          <main className="flex-grow overflow-x-hidden overflow-y-auto p-4 md:p-8 h-full"> 
+          <main className="flex-grow overflow-x-hidden overflow-y-auto p-4 md:p-8 h-full bg-gray-50 dark:bg-gray-950"> 
             <Outlet />
           </main>
         </div>

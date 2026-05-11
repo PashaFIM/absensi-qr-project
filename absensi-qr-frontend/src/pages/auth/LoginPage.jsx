@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth'; 
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'; 
+import { EyeIcon, EyeSlashIcon, MoonIcon, SunIcon } from '@heroicons/react/24/outline'; 
+import { useTheme } from '../../hooks/useTheme';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -11,6 +12,7 @@ const LoginPage = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false); 
 
     const { isAuthenticated, user, login } = useAuth();
+    const { isDark, toggleTheme } = useTheme();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -49,21 +51,31 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 bg-white shadow-2xl rounded-xl">
+        <div className="relative flex items-center justify-center h-screen bg-gray-100 dark:bg-gray-950">
+            <button
+                type="button"
+                onClick={toggleTheme}
+                className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-yellow-300 dark:hover:bg-gray-800"
+                title={isDark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'}
+                aria-label={isDark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'}
+            >
+                {isDark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+            </button>
+
+            <div className="w-full max-w-md p-8 bg-white shadow-2xl rounded-xl dark:bg-gray-900 dark:border dark:border-gray-700">
                 <div className="text-center mb-6">
                     <h1 className="text-3xl font-extrabold text-primary">Login Absensi QR</h1>
                 </div>
     
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative dark:bg-red-950 dark:border-red-800 dark:text-red-200" role="alert">
                             <span className="block sm:inline">{error}</span>
                         </div>
                     )}
 
                     <div>
-                        <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                        <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-200">
                             Username
                         </label>
                         <input
@@ -71,14 +83,14 @@ const LoginPage = () => {
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
                             placeholder="Masukkan username atau ID"
                             required
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-200">
                             Password
                         </label>
                         <div className="relative"> 
@@ -87,14 +99,14 @@ const LoginPage = () => {
                                 type={isPasswordVisible ? 'text' : 'password'} 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 pr-10"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary transition duration-150 pr-10 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
                                 placeholder="********"
                                 required
                             />
                             <button
                                 type="button"
                                 onClick={togglePasswordVisibility}
-                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
                                 aria-label={isPasswordVisible ? 'Sembunyikan password' : 'Tampilkan password'}
                             >
                                 {isPasswordVisible ? (

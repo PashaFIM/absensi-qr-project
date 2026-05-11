@@ -16,8 +16,11 @@ import {
   CloudArrowDownIcon,
   DocumentDuplicateIcon,
   ClipboardDocumentListIcon,
+  MoonIcon,
+  SunIcon,
 } from "@heroicons/react/24/outline";
 import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
 
 //  KONFIGURASI API 
 const API_GURU_DASHBOARD_URL =
@@ -163,6 +166,7 @@ const ScannerWidget = ({
 
 const DashboardGuru = () => {
   const auth = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const logout = auth?.logout || (() => {
     localStorage.removeItem("token");
     window.location.href = "/login";
@@ -312,23 +316,23 @@ const DashboardGuru = () => {
   });
   if (loading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 bg-gray-200 rounded-full mb-4" />
-          <div className="w-64 h-4 bg-gray-200 rounded" />
+          <div className="w-12 h-12 bg-gray-200 rounded-full mb-4 dark:bg-gray-800" />
+          <div className="w-64 h-4 bg-gray-200 rounded dark:bg-gray-800" />
         </div>
       </div>
     );
 
   if (error)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 dark:bg-gray-950">
+        <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center dark:bg-gray-900 dark:border dark:border-gray-700">
           <div className="w-16 h-16 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4">
             <XCircleIcon className="w-8 h-8" />
           </div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2">Gagal Memuat Data</h3>
-          <p className="text-gray-500 mb-6">{error}</p>
+          <h3 className="text-lg font-bold text-gray-900 mb-2 dark:text-gray-100">Gagal Memuat Data</h3>
+          <p className="text-gray-500 mb-6 dark:text-gray-300">{error}</p>
           <button onClick={() => window.location.reload()} className="px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition">Muat Ulang</button>
         </div>
       </div>
@@ -350,10 +354,10 @@ const DashboardGuru = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50/50 p-4 md:p-8 font-sans text-gray-900">
+    <div className="min-h-screen bg-gray-50/50 p-4 md:p-8 font-sans text-gray-900 dark:bg-gray-950 dark:text-gray-100">
       
       {/* HEADER */}
-      <div className="bg-white rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between shadow-sm border border-gray-100 mb-8 gap-4">
+      <div className="bg-white rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between shadow-sm border border-gray-100 mb-8 gap-4 dark:bg-gray-900 dark:border-gray-700">
         <div className="flex items-center gap-4">
           <img 
             src={teacher?.foto || `https://ui-avatars.com/api/?name=${teacher?.nama_guru || "Guru"}&background=random`} 
@@ -366,10 +370,19 @@ const DashboardGuru = () => {
             <div className="text-xs text-indigo-600 font-mono mt-0.5">{teacher?.nip}</div>
           </div>
         </div>
-        <div className="flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
+        <div className="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
           <CalendarDaysIcon className="w-5 h-5 text-gray-400" />
           <div className="text-sm font-medium text-gray-600">{todayLabel}</div>
           <div className="h-6 w-px bg-gray-300 mx-2 hidden md:block"></div>
+          <button
+            type="button"
+            title={isDark ? "Aktifkan mode terang" : "Aktifkan mode gelap"}
+            aria-label={isDark ? "Aktifkan mode terang" : "Aktifkan mode gelap"}
+            onClick={toggleTheme}
+            className="p-2 rounded-lg hover:bg-gray-100 transition text-gray-400 dark:hover:bg-gray-700 dark:text-yellow-300"
+          >
+            {isDark ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
+          </button>
           <button title="Logout" onClick={logout} className="p-2 rounded-lg hover:bg-red-50 hover:text-red-600 transition text-gray-400">
             <ArrowLeftOnRectangleIcon className="w-5 h-5" />
           </button>

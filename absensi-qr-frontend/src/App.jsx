@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext'; 
+import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/shared/ProtectedRoute'; 
 import Layout from './components/layout/Layout'; 
 import LoginPage from './pages/auth/LoginPage';
@@ -29,14 +30,15 @@ const RiwayatAbsensi = lazy(() => import('./pages/siswa/RiwayatAbsensi'));
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <Suspense fallback={<div className="p-10 text-center">Memuat Halaman...</div>}>
-          <Routes>
+      <ThemeProvider>
+        <AuthProvider>
+          <Suspense fallback={<div className="p-10 text-center text-gray-700 dark:text-gray-200">Memuat Halaman...</div>}>
+            <Routes>
             
             {/* 1. Redirect Default & Public Route */}
             <Route path="/" element={<Navigate to="/login" replace />} /> 
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/unauthorized" element={<h1 className="text-3xl text-center mt-20 text-red-600">403 Akses Ditolak</h1>} />
+            <Route path="/unauthorized" element={<h1 className="text-3xl text-center mt-20 text-red-600 dark:text-red-400">403 Akses Ditolak</h1>} />
 
 
             {/* 2. Protected Routes */}
@@ -78,10 +80,11 @@ function App() {
             </Route>
 
             {/* Fallback Route */}
-            <Route path="*" element={<h1 className="text-3xl text-center mt-20">404 Not Found</h1>} />
-          </Routes>
-        </Suspense>
-      </AuthProvider>
+            <Route path="*" element={<h1 className="text-3xl text-center mt-20 text-gray-900 dark:text-gray-100">404 Not Found</h1>} />
+            </Routes>
+          </Suspense>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 }

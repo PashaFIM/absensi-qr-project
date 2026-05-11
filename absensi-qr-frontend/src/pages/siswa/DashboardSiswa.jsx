@@ -87,19 +87,23 @@ const GreetingCard = ({ profile, today }) => {
 };
 
 // --- Sub-komponen: Kartu Statistik ---
-const StatCard = ({ icon: Icon, label, value, color, bgLight }) => (
-    <div className={`rounded-xl p-5 shadow-lg border ${bgLight} transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5`}>
-        <div className="flex items-center gap-3">
-            <div className={`p-2.5 rounded-lg ${color}`}>
-                <Icon className="w-5 h-5 text-white" />
-            </div>
-            <div>
-                <p className="text-2xl font-bold text-gray-800">{value}</p>
-                <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">{label}</p>
+const StatCard = ({ icon, label, value, color, bgLight }) => {
+    const Icon = icon;
+
+    return (
+        <div className={`rounded-xl p-5 shadow-lg border ${bgLight} transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5`}>
+            <div className="flex items-center gap-3">
+                <div className={`p-2.5 rounded-lg ${color}`}>
+                    <Icon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                    <p className="text-2xl font-bold text-gray-800">{value}</p>
+                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">{label}</p>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+};
 
 // --- Sub-komponen: Progress Bar Kehadiran ---
 const AttendanceProgress = ({ percentage }) => {
